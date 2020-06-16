@@ -7,10 +7,21 @@ import (
 
 // RouterGroup
 type RouterGroup struct {
-	Handlers HandlersChain
+	Handlers Handlers
 	basePath string
 	server   *Server
 	root     bool
+}
+
+// 注册组路由
+func (r *RouterGroup) Group(relativePath string, handlers ...HandlerFunc) *RouterGroup {
+	handles := append(r.Handlers, handlers...)
+	return &RouterGroup{
+		Handlers: handles,
+		basePath: getReqPath(r.basePath, relativePath),
+		server:   r.server,
+		root:     false,
+	}
 }
 
 // Use
@@ -19,15 +30,22 @@ func (r *RouterGroup) Use(middleware ...HandlerFunc) {
 }
 
 // Get
-func (r *RouterGroup) Get(relativePath string, handlers ...HandlerFunc) *urlp {
-	url := GetUri(r.basePath, relativePath)
+func (r *RouterGroup) Get(relativePath string, handlers ...HandlerFunc) {
+	path := getReqPath(r.basePath, relativePath)
 	handle := append(r.Handlers, handlers...)
-	r.handle("GET", url, handle)
-	return &urlp{url: url}
+	r.handle("GET", path, handle)
+}
+
+
+// Post
+func (r *RouterGroup) Post(relativePath string, handlers ...HandlerFunc) {
+	path := getReqPath(r.basePath, relativePath)
+	handle := append(r.Handlers, handlers...)
+	r.handle("POST", path, handle)
 }
 
 // handle
-func (r *RouterGroup) handle(httpMethod, relativePath string, handlers HandlersChain) {
+func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers) {
 	ctx := Context{
 		i:    0,
 		server:   r.server,
@@ -54,8 +72,8 @@ func (r *RouterGroup) handle(httpMethod, relativePath string, handlers HandlersC
 	}
 }
 
-// GetUri
-func GetUri(h1, h2 string) string {
+// getReqPath
+func getReqPath(h1, h2 string) string {
 	u := string(h1[len(h1)-1])
 	if u == "/" {
 		u = h1[:len(h1)-1]

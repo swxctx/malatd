@@ -9,18 +9,20 @@ import (
 type Context struct {
 	// fast http ctx
 	Ctx      *fasthttp.RequestCtx
+	// index
 	i    int
+	// malatd http server
 	server   *Server
 	data     sync.Map
 	// handlers
-	handlers HandlersChain
+	handlers Handlers
 }
 
 // HandlerFunc
 type HandlerFunc func(ctx *Context)
 
-// HandlersChain
-type HandlersChain []HandlerFunc
+// Handlers
+type Handlers []HandlerFunc
 
 // Next
 func (c *Context) Next() {

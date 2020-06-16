@@ -3,12 +3,12 @@ package malatd
 // SrvConfig
 type SrvConfig struct {
 	// 监听地址[host:port]
-	ListenAddress string `yaml:"listen_address"`
+	Address string `yaml:"address"`
 }
 
 // NewSrvConfig
 func NewSrvConfig()*SrvConfig {
 	return &SrvConfig{
-		ListenAddress: "0.0.0.0:8080",
+		Address: "0.0.0.0:8080",
 	}
 }
