@@ -8,8 +8,11 @@ import (
 
 // Server
 type Server struct {
+	// 路由组
 	RouterGroup
+	// 服务配置
 	srvConfig *SrvConfig
+	// api路由
 	router *fasthttprouter.Router
 }
 
@@ -21,8 +24,8 @@ func NewServer(srvCfg *SrvConfig) *Server{
 	}
 
 	// :8080 -> 0.0.0.0:8080
-	if string(srvCfg.ListenAddress[0]) == ":"{
-		srvCfg.ListenAddress = "0.0.0.0" + srvCfg.ListenAddress
+	if string(srvCfg.Address[0]) == ":"{
+		srvCfg.Address = "0.0.0.0" + srvCfg.Address
 	}
 
 	// new server
@@ -41,10 +44,10 @@ func NewServer(srvCfg *SrvConfig) *Server{
 
 // ListenAndServe fast http listen
 func (srv *Server)ListenAndServe()error{
-	xlog.Infof("Server Run %s",srv.srvConfig.ListenAddress)
+	xlog.Infof("Server Run %s",srv.srvConfig.Address)
 
 	// start listen
-	if err := fasthttp.ListenAndServe(srv.srvConfig.ListenAddress,srv.router.Handler);err != nil{
+	if err := fasthttp.ListenAndServe(srv.srvConfig.Address,srv.router.Handler);err != nil{
 		return err
 	}
 	return nil
