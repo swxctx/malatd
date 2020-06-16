@@ -36,7 +36,6 @@ func (r *RouterGroup) Get(relativePath string, handlers ...HandlerFunc) {
 	r.handle("GET", path, handle)
 }
 
-
 // Post
 func (r *RouterGroup) Post(relativePath string, handlers ...HandlerFunc) {
 	path := getReqPath(r.basePath, relativePath)
@@ -47,7 +46,7 @@ func (r *RouterGroup) Post(relativePath string, handlers ...HandlerFunc) {
 // handle
 func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers) {
 	ctx := Context{
-		i:    0,
+		i:        0,
 		server:   r.server,
 		handlers: handlers,
 	}
@@ -60,7 +59,7 @@ func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers)
 		defer func() {
 			if re := recover(); re != nil {
 				ctx.Ctx.SetStatusCode(500)
-				xlog.Errorf("[GET] handle err-> %v",re)
+				xlog.Errorf("[GET] handle err-> %v", re)
 				_, err = ctx.Ctx.WriteString("server error")
 			}
 		}()
@@ -68,7 +67,7 @@ func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers)
 		ctx.Next()
 	})
 	if err != nil {
-		xlog.Errorf("[HANDLE] err-> %v",err)
+		xlog.Errorf("[HANDLE] err-> %v", err)
 	}
 }
 

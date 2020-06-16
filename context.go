@@ -2,18 +2,19 @@ package malatd
 
 import (
 	"sync"
+
 	"github.com/valyala/fasthttp"
 )
 
 // Context
 type Context struct {
 	// fast http ctx
-	Ctx      *fasthttp.RequestCtx
+	Ctx *fasthttp.RequestCtx
 	// index
-	i    int
+	i int
 	// malatd http server
-	server   *Server
-	data     sync.Map
+	server *Server
+	data   sync.Map
 	// handlers
 	handlers Handlers
 }

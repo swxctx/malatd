@@ -7,7 +7,7 @@ type SrvConfig struct {
 }
 
 // NewSrvConfig
-func NewSrvConfig()*SrvConfig {
+func NewSrvConfig() *SrvConfig {
 	return &SrvConfig{
 		Address: "0.0.0.0:8080",
 	}
