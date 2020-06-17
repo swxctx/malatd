@@ -17,7 +17,7 @@ type Server struct {
 }
 
 // NewServer
-func NewServer(srvCfg *SrvConfig) *Server {
+func NewServer(srvCfg *SrvConfig, handles ...HandlerFunc) *Server {
 	// server config is nil
 	if srvCfg == nil {
 		panic("Malatd: srv config is nil.")
@@ -39,8 +39,14 @@ func NewServer(srvCfg *SrvConfig) *Server {
 		srvConfig: srvCfg,
 	}
 	srv.RouterGroup.server = srv
-	// add common plugin
-	srv.Use(runLog)
+
+	// add runlog plugin
+	if srvCfg.RunLog {
+		handles = append(handles,runLog)
+	}
+
+	// add common handle
+	srv.Use(handles...)
 	return srv
 }
 
