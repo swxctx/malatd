@@ -13,10 +13,10 @@ func main() {
 
 	// api router
 	srv.Get("/malatd", malatdApi)
-	srv.ListenAndServe()
+	srv.Run()
 }
 
 // malatd
 func malatdApi(ctx *malatd.Context) {
-	ctx.String(200,"malatd")
+	ctx.String(200, "malatd")
 }

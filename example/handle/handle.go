@@ -17,26 +17,26 @@ func main() {
 
 	// api router
 	srv.Get("/malatd", authHandle, malatdApi)
-	srv.ListenAndServe()
+	srv.Run()
 }
 
 // tokenHandle
-func tokenHandle(ctx *malatd.Context){
+func tokenHandle(ctx *malatd.Context) {
 	xlog.Infof("tokenHandle: current tokenHandle")
-	xlog.Infof("tokenHandle: Params-> %v",string(ctx.Ctx.QueryArgs().Peek("id")))
+	xlog.Infof("tokenHandle: Params-> %v", string(ctx.Ctx.QueryArgs().Peek("id")))
 	ctx.Next()
 }
 
 // authHandle
-func authHandle(ctx *malatd.Context){
+func authHandle(ctx *malatd.Context) {
 	xlog.Infof("authHandle: current authHandle")
-	xlog.Infof("authHandle: Params-> %v",string(ctx.Ctx.QueryArgs().Peek("id")))
+	xlog.Infof("authHandle: Params-> %v", string(ctx.Ctx.QueryArgs().Peek("id")))
 	ctx.Next()
 }
 
 // malatd
 func malatdApi(ctx *malatd.Context) {
 	xlog.Infof("malatdApi: current malatdApi")
-	xlog.Infof("malatdApi: Params-> %v",string(ctx.Ctx.QueryArgs().Peek("id")))
-	ctx.String(200,"hello malatd")
+	xlog.Infof("malatdApi: Params-> %v", string(ctx.Ctx.QueryArgs().Peek("id")))
+	ctx.String(200, "hello malatd")
 }
