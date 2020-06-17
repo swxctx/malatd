@@ -39,16 +39,19 @@ func NewServer(srvCfg *SrvConfig) *Server {
 		srvConfig: srvCfg,
 	}
 	srv.RouterGroup.server = srv
+	// add common plugin
+	srv.Use(runLog)
 	return srv
 }
 
 // ListenAndServe fast http listen
-func (srv *Server) ListenAndServe() error {
+func (srv *Server) Run() error {
 	xlog.Infof("Server Run %s", srv.srvConfig.Address)
 
 	// start listen
 	if err := fasthttp.ListenAndServe(srv.srvConfig.Address, srv.router.Handler); err != nil {
 		return err
 	}
+
 	return nil
 }
