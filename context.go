@@ -15,24 +15,24 @@ type Context struct {
 	// malatd http server
 	server *Server
 	data   sync.Map
-	// handlers
-	handlers Handlers
+	// server plugins / handler
+	plugins Plugins
 }
 
-// HandlerFunc
-type HandlerFunc func(ctx *Context)
+// Plugin
+type Plugin func(ctx *Context)
 
-// Handlers
-type Handlers []HandlerFunc
+// Plugins
+type Plugins []Plugin
 
 // Next
 func (c *Context) Next() {
 	c.i += 1
-	if c.i <= len(c.handlers) {
-		c.handlers[c.i-1](c)
+	if c.i <= len(c.plugins) {
+		c.plugins[c.i-1](c)
 	} else {
 		c.i = 1
-		c.handlers[0](c)
+		c.plugins[0](c)
 	}
 }
 

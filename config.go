@@ -12,5 +12,6 @@ type SrvConfig struct {
 func NewSrvConfig() *SrvConfig {
 	return &SrvConfig{
 		Address: "0.0.0.0:8080",
+		RunLog:  true,
 	}
 }

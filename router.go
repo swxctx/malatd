@@ -7,17 +7,17 @@ import (
 
 // RouterGroup
 type RouterGroup struct {
-	Handlers Handlers
+	Plugins  Plugins
 	basePath string
 	server   *Server
 	root     bool
 }
 
 // 注册组路由
-func (r *RouterGroup) Group(relativePath string, handlers ...HandlerFunc) *RouterGroup {
-	handles := append(r.Handlers, handlers...)
+func (r *RouterGroup) Group(relativePath string, plugins ...Plugin) *RouterGroup {
+	gPlugins := append(r.Plugins, plugins...)
 	return &RouterGroup{
-		Handlers: handles,
+		Plugins:  gPlugins,
 		basePath: getReqPath(r.basePath, relativePath),
 		server:   r.server,
 		root:     false,
@@ -25,30 +25,30 @@ func (r *RouterGroup) Group(relativePath string, handlers ...HandlerFunc) *Route
 }
 
 // Use
-func (r *RouterGroup) Use(middleware ...HandlerFunc) {
-	r.Handlers = append(r.Handlers, middleware...)
+func (r *RouterGroup) Use(plugins ...Plugin) {
+	r.Plugins = append(r.Plugins, plugins...)
 }
 
 // Get
-func (r *RouterGroup) Get(relativePath string, handlers ...HandlerFunc) {
+func (r *RouterGroup) Get(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
-	handle := append(r.Handlers, handlers...)
-	r.handle("GET", path, handle)
+	plugin := append(r.Plugins, plugins...)
+	r.handle("GET", path, plugin)
 }
 
 // Post
-func (r *RouterGroup) Post(relativePath string, handlers ...HandlerFunc) {
+func (r *RouterGroup) Post(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
-	handle := append(r.Handlers, handlers...)
-	r.handle("POST", path, handle)
+	plugin := append(r.Plugins, plugins...)
+	r.handle("POST", path, plugin)
 }
 
-// handle
-func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers) {
+// plugin
+func (r *RouterGroup) handle(httpMethod, relativePath string, plugins Plugins) {
 	ctx := Context{
-		i:        0,
-		server:   r.server,
-		handlers: handlers,
+		i:       0,
+		server:  r.server,
+		plugins: plugins,
 	}
 
 	var (
@@ -59,7 +59,7 @@ func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers)
 		defer func() {
 			if re := recover(); re != nil {
 				ctx.Ctx.SetStatusCode(500)
-				xlog.Errorf("[GET] handle err-> %v", re)
+				xlog.Errorf("[GET] plugin err-> %v", re)
 				_, err = ctx.Ctx.WriteString("server error")
 			}
 		}()
@@ -67,7 +67,7 @@ func (r *RouterGroup) handle(httpMethod, relativePath string, handlers Handlers)
 		ctx.Next()
 	})
 	if err != nil {
-		xlog.Errorf("[HANDLE] err-> %v", err)
+		xlog.Errorf("[PLUGIN] err-> %v", err)
 	}
 }
 
