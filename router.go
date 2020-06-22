@@ -43,6 +43,13 @@ func (r *RouterGroup) Post(relativePath string, plugins ...Plugin) {
 	r.handle("POST", path, plugin)
 }
 
+// Options
+func (r *RouterGroup) Options(relativePath string, plugins ...Plugin) {
+	path := getReqPath(r.basePath, relativePath)
+	plugin := append(r.Plugins, plugins...)
+	r.handle("OPTIONS", path, plugin)
+}
+
 // plugin
 func (r *RouterGroup) handle(httpMethod, relativePath string, plugins Plugins) {
 	ctx := Context{
@@ -55,17 +62,44 @@ func (r *RouterGroup) handle(httpMethod, relativePath string, plugins Plugins) {
 		err error
 	)
 
-	r.server.router.GET(relativePath, func(ctxF *fasthttp.RequestCtx) {
-		defer func() {
-			if re := recover(); re != nil {
-				ctx.Ctx.SetStatusCode(500)
-				xlog.Errorf("[GET] plugin err-> %v", re)
-				_, err = ctx.Ctx.WriteString("server error")
-			}
-		}()
-		ctx.Ctx = ctxF
-		ctx.Next()
-	})
+	switch httpMethod {
+	case "GET":
+		r.server.router.GET(relativePath, func(ctxF *fasthttp.RequestCtx) {
+			defer func() {
+				if re := recover(); re != nil {
+					ctx.Ctx.SetStatusCode(500)
+					xlog.Errorf("[GET] err-> %v", re)
+					_, err = ctx.Ctx.WriteString("server error")
+				}
+			}()
+			ctx.Ctx = ctxF
+			ctx.Next()
+		})
+	case "POST":
+		r.server.router.POST(relativePath, func(ctxF *fasthttp.RequestCtx) {
+			defer func() {
+				if re := recover(); re != nil {
+					ctx.Ctx.SetStatusCode(500)
+					xlog.Errorf("[POST] err-> %v", re)
+					_, err = ctx.Ctx.WriteString("server error")
+				}
+			}()
+			ctx.Ctx = ctxF
+			ctx.Next()
+		})
+	case "OPTIONS":
+		r.server.router.OPTIONS(relativePath, func(ctxF *fasthttp.RequestCtx) {
+			defer func() {
+				if re := recover(); re != nil {
+					ctx.Ctx.SetStatusCode(500)
+					xlog.Errorf("[OPTIONS] err-> %v", re)
+					_, err = ctx.Ctx.WriteString("server error")
+				}
+			}()
+			ctx.Ctx = ctxF
+			ctx.Next()
+		})
+	}
 	if err != nil {
 		xlog.Errorf("[PLUGIN] err-> %v", err)
 	}
