@@ -14,11 +14,27 @@ func main() {
 
 	// api router
 	srv.Get("/malatd", malatdApi)
+	srv.Post("/malatd", malatdApi)
 	srv.Run()
+}
+
+type Args struct {
+	// body
+	A int `json:"a"`
+	B int `json:"b"`
+	// query
+	C int `json:"c"`
 }
 
 // malatd
 func malatdApi(ctx *malatd.Context) {
-	xlog.Infof("querys-> %v", ctx.Ctx.QueryArgs())
+	var (
+		argData *Args
+	)
+
+	xlog.Infof("Content-> %s", ctx.ContentType())
+	ctx.Bind(&argData)
+
+	xlog.Infof("args-> %v", argData)
 	ctx.String(200, "malatd")
 }

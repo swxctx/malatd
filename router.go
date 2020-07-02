@@ -50,7 +50,7 @@ func (r *RouterGroup) Options(relativePath string, plugins ...Plugin) {
 	r.handle("OPTIONS", path, plugin)
 }
 
-// plugin
+// handle
 func (r *RouterGroup) handle(httpMethod, relativePath string, plugins Plugins) {
 	ctx := Context{
 		i:       0,
