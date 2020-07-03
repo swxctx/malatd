@@ -1,8 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/swxctx/malatd"
+	"github.com/swxctx/malatd/binding"
 	"github.com/swxctx/xlog"
+)
+
+var (
+	myApiware = binding.New(nil, nil)
 )
 
 /*
@@ -20,21 +26,29 @@ func main() {
 
 type Args struct {
 	// body
-	A int `json:"a"`
-	B int `json:"b"`
+	A int `param:"in(query)" json:"a"`
+	B int `param:"in(query)" json:"b"`
 	// query
-	C int `json:"c"`
+	C int `param:"in(query)" json:"c"`
 }
 
 // malatd
 func malatdApi(ctx *malatd.Context) {
-	var (
-		argData *Args
+	err := myApiware.Register(
+		new(Args),
 	)
+	if err != nil {
+		panic(err)
+	}
 
-	xlog.Infof("Content-> %s", ctx.ContentType())
-	ctx.Bind(&argData)
+	// bind params
+	params := new(Args)
+	err = myApiware.Bind(params, ctx.CallCtx)
+	if err != nil{
+		panic(err)
+	}
+	json.MarshalIndent(params, "", " ")
+	xlog.Infof("Args-> %v",params)
 
-	xlog.Infof("args-> %v", argData)
 	ctx.String(200, "malatd")
 }
