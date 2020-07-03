@@ -6,6 +6,6 @@ import (
 
 // runLog
 func runLog(ctx *Context) {
-	xlog.Infof("From %s, %s", ctx.Ctx.RemoteAddr().String(), ctx.Ctx.Request.String())
+	xlog.Infof("From %s, %s", ctx.CallCtx.RemoteAddr().String(), ctx.CallCtx.Request.String())
 	ctx.Next()
 }
