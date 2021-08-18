@@ -13,10 +13,17 @@ func main() {
 
 	// api router
 	srv.Get("/malatd", malatdApi)
+	srv.Post("/malatd", malatdApi)
 	srv.Run()
+}
+
+type User struct {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
 }
 
 // malatd
 func malatdApi(ctx *malatd.Context) {
+
 	ctx.String(200, "malatd")
 }

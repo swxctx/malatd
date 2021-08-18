@@ -5,8 +5,8 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// RouterGroup
-type RouterGroup struct {
+// Router
+type Router struct {
 	Plugins  Plugins
 	basePath string
 	server   *Server
@@ -14,9 +14,9 @@ type RouterGroup struct {
 }
 
 // 注册组路由
-func (r *RouterGroup) Group(relativePath string, plugins ...Plugin) *RouterGroup {
+func (r *Router) Group(relativePath string, plugins ...Plugin) *Router {
 	gPlugins := append(r.Plugins, plugins...)
-	return &RouterGroup{
+	return &Router{
 		Plugins:  gPlugins,
 		basePath: getReqPath(r.basePath, relativePath),
 		server:   r.server,
@@ -25,35 +25,35 @@ func (r *RouterGroup) Group(relativePath string, plugins ...Plugin) *RouterGroup
 }
 
 // Use
-func (r *RouterGroup) Use(plugins ...Plugin) {
+func (r *Router) Use(plugins ...Plugin) {
 	r.Plugins = append(r.Plugins, plugins...)
 }
 
 // Get
-func (r *RouterGroup) Get(relativePath string, plugins ...Plugin) {
+func (r *Router) Get(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
 	r.handle("GET", path, plugin)
 }
 
 // Post
-func (r *RouterGroup) Post(relativePath string, plugins ...Plugin) {
+func (r *Router) Post(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
 	r.handle("POST", path, plugin)
 }
 
 // Options
-func (r *RouterGroup) Options(relativePath string, plugins ...Plugin) {
+func (r *Router) Options(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
 	r.handle("OPTIONS", path, plugin)
 }
 
 // handle
-func (r *RouterGroup) handle(httpMethod, relativePath string, plugins Plugins) {
+func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 	ctx := Context{
-		i:       0,
+		index:   0,
 		server:  r.server,
 		plugins: plugins,
 	}

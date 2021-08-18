@@ -10,10 +10,10 @@ type (
 		// fast http ctx
 		CallCtx *fasthttp.RequestCtx
 		// index
-		i int
-		// malatd http server
+		index int
+		// http server
 		server *Server
-		// server plugins / handler
+		// server plugins || handler
 		plugins Plugins
 	}
 )
@@ -26,11 +26,11 @@ type Plugins []Plugin
 
 // Next
 func (c *Context) Next() {
-	c.i += 1
-	if c.i <= len(c.plugins) {
-		c.plugins[c.i-1](c)
+	c.index += 1
+	if c.index <= len(c.plugins) {
+		c.plugins[c.index-1](c)
 	} else {
-		c.i = 1
+		c.index = 1
 		c.plugins[0](c)
 	}
 }

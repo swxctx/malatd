@@ -9,7 +9,7 @@ import (
 // Server
 type Server struct {
 	// 路由组
-	RouterGroup
+	Router
 	// 服务配置
 	srvConfig *SrvConfig
 	// api路由
@@ -30,12 +30,12 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 
 	// add runlog plugin
 	if srvCfg.RunLog {
-		plugins = append(plugins, runLog)
+		plugins = append(plugins, runLogPlugin)
 	}
 
 	// new server
 	srv := &Server{
-		RouterGroup: RouterGroup{
+		Router: Router{
 			Plugins:  plugins,
 			root:     true,
 			basePath: "/",
@@ -43,7 +43,7 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 		router:    fasthttprouter.New(),
 		srvConfig: srvCfg,
 	}
-	srv.RouterGroup.server = srv
+	srv.Router.server = srv
 	return srv
 }
 
