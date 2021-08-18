@@ -1,8 +1,7 @@
 package main
 
 import (
-	"github.com/swxctx/malatd"
-	"github.com/swxctx/xlog"
+	td "github.com/swxctx/malatd"
 )
 
 /*
@@ -10,8 +9,8 @@ import (
 */
 func main() {
 	// new server
-	srv := malatd.NewServer(
-		malatd.NewSrvConfig(),
+	srv := td.NewServer(
+		td.NewSrvConfig(),
 		tokenPlugin,
 	)
 
@@ -21,22 +20,22 @@ func main() {
 }
 
 // tokenPlugin
-func tokenPlugin(ctx *malatd.Context) {
-	xlog.Infof("tokenPlugin: current tokenPlugin")
-	xlog.Infof("tokenPlugin: Params-> %v", string(ctx.CallCtx.QueryArgs().Peek("id")))
+func tokenPlugin(ctx *td.Context) {
+	td.Infof("tokenPlugin: current tokenPlugin")
+	td.Infof("tokenPlugin: Params-> %v", ctx.Request.URL.Query().Get("id"))
 	ctx.Next()
 }
 
 // authHandle
-func authPlugin(ctx *malatd.Context) {
-	xlog.Infof("authPlugin: current authPlugin")
-	xlog.Infof("authPlugin: Params-> %v", string(ctx.CallCtx.QueryArgs().Peek("id")))
+func authPlugin(ctx *td.Context) {
+	td.Infof("authPlugin: current authPlugin")
+	td.Infof("authPlugin: Params-> %v", ctx.Request.URL.Query().Get("id"))
 	ctx.Next()
 }
 
 // malatd
-func malatdApi(ctx *malatd.Context) {
-	xlog.Infof("malatdApi: current malatdApi")
-	xlog.Infof("malatdApi: Params-> %v", string(ctx.CallCtx.QueryArgs().Peek("id")))
+func malatdApi(ctx *td.Context) {
+	td.Infof("malatdApi: current malatdApi")
+	td.Infof("malatdApi: Params-> %v", ctx.Request.URL.Query().Get("id"))
 	ctx.String(200, "hello malatd")
 }

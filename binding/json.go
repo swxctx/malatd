@@ -1,9 +1,15 @@
 package binding
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 
-	"github.com/swxctx/malatd"
+	td "github.com/swxctx/malatd"
+)
+
+var (
+	EnableDecoderUseNumber = false
 )
 
 type jsonBinding struct{}
@@ -14,16 +20,21 @@ func (jsonBinding) Name() string {
 }
 
 // Bind
-func (jsonBinding) Bind(ctx *malatd.Context, obj interface{}) error {
-	return decodeJSON(ctx.CallCtx.Request.Body(), obj)
+func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
+	return decodeJSON(ctx.Request.Body, obj)
 }
 
-// BindBody
 func (jsonBinding) BindBody(body []byte, obj interface{}) error {
-	return decodeJSON(body, obj)
+	return decodeJSON(bytes.NewReader(body), obj)
 }
 
-// decodeJSON
-func decodeJSON(data []byte, obj interface{}) error {
-	return json.Unmarshal(data, obj)
+func decodeJSON(r io.Reader, obj interface{}) error {
+	decoder := json.NewDecoder(r)
+	if EnableDecoderUseNumber {
+		decoder.UseNumber()
+	}
+	if err := decoder.Decode(obj); err != nil {
+		return err
+	}
+	return nil
 }

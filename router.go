@@ -1,8 +1,9 @@
-package malatd
+package td
 
 import (
-	"github.com/swxctx/xlog"
-	"github.com/valyala/fasthttp"
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 // Router
@@ -24,13 +25,14 @@ func (r *Router) Group(relativePath string, plugins ...Plugin) *Router {
 	}
 }
 
-// Use
-func (r *Router) Use(plugins ...Plugin) {
+// AddPlugin
+func (r *Router) AddPlugin(plugins ...Plugin) {
 	r.Plugins = append(r.Plugins, plugins...)
 }
 
 // Get
 func (r *Router) Get(relativePath string, plugins ...Plugin) {
+	Infof("[ROUTE]: %s GET", relativePath)
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
 	r.handle("GET", path, plugin)
@@ -38,6 +40,7 @@ func (r *Router) Get(relativePath string, plugins ...Plugin) {
 
 // Post
 func (r *Router) Post(relativePath string, plugins ...Plugin) {
+	Infof("[ROUTE]: %s POST", relativePath)
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
 	r.handle("POST", path, plugin)
@@ -45,6 +48,7 @@ func (r *Router) Post(relativePath string, plugins ...Plugin) {
 
 // Options
 func (r *Router) Options(relativePath string, plugins ...Plugin) {
+	Infof("[ROUTE]: %s OPTIONS", relativePath)
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
 	r.handle("OPTIONS", path, plugin)
@@ -64,44 +68,47 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 
 	switch httpMethod {
 	case "GET":
-		r.server.router.GET(relativePath, func(ctxF *fasthttp.RequestCtx) {
+		r.server.router.GET(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					ctx.CallCtx.SetStatusCode(500)
-					xlog.Errorf("[GET] err-> %v", re)
-					_, err = ctx.CallCtx.WriteString("server error")
+					response.WriteHeader(500)
+					Errorf("[GET] err: %v", re)
+					_, err = response.Write([]byte("server error"))
 				}
 			}()
-			ctx.CallCtx = ctxF
+			ctx.Request = request
+			ctx.ResponseWriter = response
 			ctx.Next()
 		})
 	case "POST":
-		r.server.router.POST(relativePath, func(ctxF *fasthttp.RequestCtx) {
+		r.server.router.POST(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					ctx.CallCtx.SetStatusCode(500)
-					xlog.Errorf("[POST] err-> %v", re)
-					_, err = ctx.CallCtx.WriteString("server error")
+					response.WriteHeader(500)
+					Errorf("[POST] err: %v", re)
+					_, err = response.Write([]byte("server error"))
 				}
 			}()
-			ctx.CallCtx = ctxF
+			ctx.Request = request
+			ctx.ResponseWriter = response
 			ctx.Next()
 		})
 	case "OPTIONS":
-		r.server.router.OPTIONS(relativePath, func(ctxF *fasthttp.RequestCtx) {
+		r.server.router.OPTIONS(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					ctx.CallCtx.SetStatusCode(500)
-					xlog.Errorf("[OPTIONS] err-> %v", re)
-					_, err = ctx.CallCtx.WriteString("server error")
+					response.WriteHeader(500)
+					Errorf("[POST] err: %v", re)
+					_, err = response.Write([]byte("server error"))
 				}
 			}()
-			ctx.CallCtx = ctxF
+			ctx.Request = request
+			ctx.ResponseWriter = response
 			ctx.Next()
 		})
 	}
 	if err != nil {
-		xlog.Errorf("[PLUGIN] err-> %v", err)
+		Errorf("[PLUGIN] handle err: %v", err)
 	}
 }
 

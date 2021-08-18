@@ -1,14 +1,18 @@
-package malatd
+package td
 
 import (
-	"github.com/valyala/fasthttp"
+	"encoding/json"
+	"net/http"
 )
 
 type (
 	// Context
 	Context struct {
 		// fast http ctx
-		CallCtx *fasthttp.RequestCtx
+		// Request
+		Request *http.Request
+		// ResponseWriter
+		ResponseWriter http.ResponseWriter
 		// index
 		index int
 		// http server
@@ -37,11 +41,22 @@ func (c *Context) Next() {
 
 // ContentType
 func (c *Context) ContentType() string {
-	return string(c.CallCtx.Request.Header.ContentType())
+	return c.Request.Header.Get("Content-Type")
 }
 
 // String response string
 func (c *Context) String(code int, msg string) (int, error) {
-	c.CallCtx.SetStatusCode(code)
-	return c.CallCtx.WriteString(msg)
+	c.ResponseWriter.WriteHeader(code)
+	return c.ResponseWriter.Write([]byte(msg))
+}
+
+// RenderJson response json
+func (c *Context) Json(obj interface{}) (int, error) {
+	resp, _ := encodeJSON(obj)
+	return c.ResponseWriter.Write(resp)
+}
+
+// encodeJSON
+func encodeJSON(obj interface{}) ([]byte, error) {
+	return json.Marshal(obj)
 }

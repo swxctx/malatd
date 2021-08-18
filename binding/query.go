@@ -1,9 +1,6 @@
 package binding
 
-import (
-	"github.com/swxctx/malatd"
-	"net/http"
-)
+import td "github.com/swxctx/malatd"
 
 type queryBinding struct{}
 
@@ -13,9 +10,8 @@ func (queryBinding) Name() string {
 }
 
 // Bind
-func (queryBinding) Bind(ctx *malatd.Context, obj interface{}) error {
-	values := ctx.CallCtx.QueryArgs().
-	if err := mapForm(obj, values); err != nil {
+func (queryBinding) Bind(ctx *td.Context, obj interface{}) error {
+	if err := mapForm(obj, ctx.Request.URL.Query()); err != nil {
 		return err
 	}
 	return nil
