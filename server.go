@@ -1,9 +1,9 @@
-package malatd
+package td
 
 import (
-	"github.com/buaazp/fasthttprouter"
-	"github.com/swxctx/xlog"
-	"github.com/valyala/fasthttp"
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 // Server
@@ -13,7 +13,7 @@ type Server struct {
 	// 服务配置
 	srvConfig *SrvConfig
 	// api路由
-	router *fasthttprouter.Router
+	router *httprouter.Router
 }
 
 // NewServer
@@ -28,10 +28,8 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 		srvCfg.Address = "0.0.0.0" + srvCfg.Address
 	}
 
-	// add runlog plugin
-	if srvCfg.RunLog {
-		plugins = append(plugins, runLogPlugin)
-	}
+	// 请求日志
+	plugins = append(plugins, runLogPlugin)
 
 	// new server
 	srv := &Server{
@@ -40,19 +38,22 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 			root:     true,
 			basePath: "/",
 		},
-		router:    fasthttprouter.New(),
+		router:    httprouter.New(),
 		srvConfig: srvCfg,
 	}
 	srv.Router.server = srv
+
+	Infof("[SERVER] New server, Address: %s", srvCfg.Address)
 	return srv
 }
 
 // ListenAndServe fast http listen
 func (srv *Server) Run() error {
-	xlog.Infof("Server Run %s", srv.srvConfig.Address)
+	Infof("[SERVER] %s Server Run", srv.srvConfig.Address)
 
 	// start listen
-	if err := fasthttp.ListenAndServe(srv.srvConfig.Address, srv.router.Handler); err != nil {
+	if err := http.ListenAndServe(srv.srvConfig.Address, srv.router); err != nil {
+		Errorf("[SERVER] Server Listen err: %v", err)
 		return err
 	}
 

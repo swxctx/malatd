@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/swxctx/malatd"
+	td "github.com/swxctx/malatd"
 )
 
 /*
@@ -9,7 +9,7 @@ import (
 */
 func main() {
 	// new server
-	srv := malatd.NewServer(malatd.NewSrvConfig())
+	srv := td.NewServer(td.NewSrvConfig())
 
 	// api router
 	srv.Get("/malatd", malatdApi)
@@ -23,7 +23,6 @@ type User struct {
 }
 
 // malatd
-func malatdApi(ctx *malatd.Context) {
-
+func malatdApi(ctx *td.Context) {
 	ctx.String(200, "malatd")
 }
