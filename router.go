@@ -71,9 +71,9 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		r.server.router.GET(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					response.WriteHeader(500)
+					response.WriteHeader(CodeInternalServerError)
 					Errorf("[GET] err: %v", re)
-					_, err = response.Write([]byte("server error"))
+					ctx.RspJson(RerrInternalServer)
 				}
 			}()
 			ctx.Request = request
@@ -84,9 +84,9 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		r.server.router.POST(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					response.WriteHeader(500)
+					response.WriteHeader(CodeInternalServerError)
 					Errorf("[POST] err: %v", re)
-					_, err = response.Write([]byte("server error"))
+					ctx.RspJson(RerrInternalServer)
 				}
 			}()
 			ctx.Request = request
@@ -97,9 +97,9 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		r.server.router.OPTIONS(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					response.WriteHeader(500)
+					response.WriteHeader(CodeInternalServerError)
 					Errorf("[POST] err: %v", re)
-					_, err = response.Write([]byte("server error"))
+					ctx.RspJson(RerrInternalServer)
 				}
 			}()
 			ctx.Request = request

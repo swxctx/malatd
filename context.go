@@ -66,13 +66,13 @@ func (c *Context) Query(key string) string {
 }
 
 // String response string
-func (c *Context) String(code int, msg string) (int, error) {
+func (c *Context) RspString(code int, msg string) (int, error) {
 	c.ResponseWriter.WriteHeader(code)
 	return c.ResponseWriter.Write([]byte(msg))
 }
 
 // RenderJson response json
-func (c *Context) Json(obj interface{}) (int, error) {
+func (c *Context) RspJson(obj interface{}) (int, error) {
 	resp, _ := encodeJSON(obj)
 	return c.ResponseWriter.Write(resp)
 }

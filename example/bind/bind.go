@@ -49,7 +49,7 @@ func malatdApi1(ctx *td.Context) {
 		A: params.A,
 		B: params.B,
 	}
-	ctx.Json(result)
+	ctx.RspJson(result)
 }
 
 // malatd
@@ -67,5 +67,5 @@ func malatdApi2(ctx *td.Context) {
 	}
 	td.Infof("Args-> %v", params)
 
-	ctx.String(200, "malatd")
+	ctx.RspString(200, "malatd")
 }
