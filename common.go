@@ -46,13 +46,3 @@ var (
 	RerrNotFound         = NewRerror(CodeNotFound, CodeMessage(CodeNotFound), "")
 	RerrInternalServer   = NewRerror(CodeInternalServerError, CodeMessage(CodeInternalServerError), "")
 )
-
-const (
-	// 客户端IP
-	RemoteIP = "TD-Remote-IP"
-)
-
-// GetRemoteIP
-func GetRemoteIP() {
-
-}
