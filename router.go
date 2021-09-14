@@ -73,7 +73,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 				if re := recover(); re != nil {
 					response.WriteHeader(CodeInternalServerError)
 					Errorf("[GET] err: %v", re)
-					ctx.RspJson(RerrInternalServer)
+					ctx.RendRerr(RerrInternalServer)
 				}
 			}()
 			ctx.Request = request
@@ -86,7 +86,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 				if re := recover(); re != nil {
 					response.WriteHeader(CodeInternalServerError)
 					Errorf("[POST] err: %v", re)
-					ctx.RspJson(RerrInternalServer)
+					ctx.RendRerr(RerrInternalServer)
 				}
 			}()
 			ctx.Request = request
@@ -99,7 +99,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 				if re := recover(); re != nil {
 					response.WriteHeader(CodeInternalServerError)
 					Errorf("[POST] err: %v", re)
-					ctx.RspJson(RerrInternalServer)
+					ctx.RendRerr(RerrInternalServer)
 				}
 			}()
 			ctx.Request = request

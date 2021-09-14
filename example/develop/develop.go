@@ -24,5 +24,5 @@ type User struct {
 
 // malatd
 func malatdApi(ctx *td.Context) {
-	ctx.RspString(200, "malatd")
+	ctx.RendString(200, "malatd")
 }

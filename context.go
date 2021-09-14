@@ -65,16 +65,22 @@ func (c *Context) Query(key string) string {
 	return c.Request.URL.Query().Get(key)
 }
 
-// String response string
-func (c *Context) RspString(code int, msg string) (int, error) {
+// RendString response string
+func (c *Context) RendString(code int, msg string) (int, error) {
 	c.ResponseWriter.WriteHeader(code)
 	return c.ResponseWriter.Write([]byte(msg))
 }
 
-// RenderJson response json
-func (c *Context) RspJson(obj interface{}) (int, error) {
+// RendJson response json
+func (c *Context) RendJson(obj interface{}) (int, error) {
 	resp, _ := encodeJSON(obj)
 	return c.ResponseWriter.Write(resp)
+}
+
+// RendRerr response rerror
+func (c *Context) RendRerr(rerr *Rerror) (int, error) {
+	rerrRsp, _ := rerr.MarshalRerror()
+	return c.ResponseWriter.Write(rerrRsp)
 }
 
 // encodeJSON
