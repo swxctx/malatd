@@ -28,6 +28,7 @@ type Args struct {
 type Result struct {
 	A int    `json:"a"`
 	B string `json:"b"`
+	C string `json:"c"`
 }
 
 var (
@@ -60,6 +61,7 @@ func malatdApi1Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
+		C: arg.C,
 	}
 	return result, nil
 }
@@ -94,6 +96,7 @@ func malatdApi2Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
+		C: arg.C,
 	}
 	return result, nil
 }
