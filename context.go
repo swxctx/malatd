@@ -9,7 +9,6 @@ import (
 type (
 	// Context
 	Context struct {
-		// fast http ctx
 		// Request
 		Request *http.Request
 		// ResponseWriter
@@ -45,9 +44,19 @@ func (c *Context) Head(key string) string {
 	return c.Request.Header.Get(key)
 }
 
+// HeadSet
+func (c *Context) HeadSet(key, value string) {
+	c.ResponseWriter.Header().Set(key, value)
+}
+
 // ContentType
 func (c *Context) ContentType() string {
 	return c.Request.Header.Get("Content-Type")
+}
+
+// ContentType
+func (c *Context) ContentTypeSet(value string) {
+	c.ResponseWriter.Header().Set("Content-Type", value)
 }
 
 // GetRemoteIP
