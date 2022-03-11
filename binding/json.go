@@ -34,6 +34,9 @@ func decodeJSON(r io.Reader, obj interface{}) error {
 		decoder.UseNumber()
 	}
 	if err := decoder.Decode(obj); err != nil {
+		if err == io.EOF {
+			return nil
+		}
 		return err
 	}
 	return nil
