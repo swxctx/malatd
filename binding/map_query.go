@@ -24,7 +24,7 @@ func mapForm(ptr interface{}, form map[string][]string) error {
 		}
 
 		structFieldKind := structField.Kind()
-		inputFieldName := typeField.Tag.Get("form")
+		inputFieldName := typeField.Tag.Get("query")
 		inputFieldNameList := strings.Split(inputFieldName, ",")
 		inputFieldName = inputFieldNameList[0]
 		var defaultValue string
