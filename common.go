@@ -45,4 +45,5 @@ var (
 	RerrBadPacket        = NewRerror(CodeBadPacket, CodeMessage(CodeBadPacket), "")
 	RerrNotFound         = NewRerror(CodeNotFound, CodeMessage(CodeNotFound), "")
 	RerrInternalServer   = NewRerror(CodeInternalServerError, CodeMessage(CodeInternalServerError), "")
+	RerrBadGateway  = NewRerror(CodeBadGateway, CodeMessage(CodeBadGateway), "")
 )
