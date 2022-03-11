@@ -97,14 +97,15 @@ func main() {
 }
 
 type Args struct {
-	A int    `form:"a" json:"a"`
-	B string `form:"b" json:"b"`
+	A int    `query:"a" json:"a"`
+	B string `query:"b" json:"b"`
 	C string `json:"c"`
 }
 
 type Result struct {
 	A int    `json:"a"`
 	B string `json:"b"`
+	C string `json:"c"`
 }
 
 var (
@@ -118,7 +119,8 @@ func malatdApi1Handle(ctx *td.Context) {
 	params := new(Args)
 	err := binderQuery.Bind(ctx, params)
 	if err != nil {
-		panic(err)
+		ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
+		return
 	}
 
 	// api逻辑调用
@@ -136,6 +138,7 @@ func malatdApi1Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
+		C: arg.C,
 	}
 	return result, nil
 }
@@ -146,14 +149,14 @@ func malatdApi2Handle(ctx *td.Context) {
 	params := new(Args)
 	err := binder.Bind(ctx, params)
 	if err != nil {
-		//ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
-		//return
-		panic(td.RerrInternalServer.SetReason(err.Error()))
+		ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
+		return
 	}
 
 	err = binderQuery.Bind(ctx, params)
 	if err != nil {
-		panic(err)
+		ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
+		return
 	}
 
 	// api逻辑调用
@@ -170,6 +173,7 @@ func malatdApi2Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
+		C: arg.C,
 	}
 	return result, nil
 }
