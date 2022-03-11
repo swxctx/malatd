@@ -1,9 +1,8 @@
 package td
 
 import (
+	"github.com/swxctx/malatd/httprouter"
 	"net/http"
-
-	"github.com/julienschmidt/httprouter"
 )
 
 // Server
