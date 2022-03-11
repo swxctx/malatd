@@ -74,6 +74,7 @@ func (c *Context) RendString(code int, msg string) (int, error) {
 // RendJson response json
 func (c *Context) RendJson(obj interface{}) (int, error) {
 	resp, _ := encodeJSON(obj)
+	c.ResponseWriter.Header().Set("content-type","applicaton/json")
 	return c.ResponseWriter.Write(resp)
 }
 
