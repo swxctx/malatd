@@ -37,5 +37,5 @@ func authPlugin(ctx *td.Context) {
 func malatdApi(ctx *td.Context) {
 	td.Infof("malatdApi: current malatdApi")
 	td.Infof("malatdApi: Params-> %v", ctx.Request.URL.Query().Get("id"))
-	ctx.String(200, "hello malatd")
+	ctx.RendString(200, "hello malatd")
 }

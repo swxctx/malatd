@@ -3,6 +3,7 @@ package td
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 )
 
 type (
@@ -39,21 +40,47 @@ func (c *Context) Next() {
 	}
 }
 
+// Head
+func (c *Context) Head(key string) string {
+	return c.Request.Header.Get(key)
+}
+
 // ContentType
 func (c *Context) ContentType() string {
 	return c.Request.Header.Get("Content-Type")
 }
 
-// String response string
-func (c *Context) String(code int, msg string) (int, error) {
+// GetRemoteIP
+func (c *Context) GetRemoteIP() string {
+	return c.Request.RemoteAddr
+}
+
+// QueryValues
+func (c *Context) QueryValues() url.Values {
+	return c.Request.URL.Query()
+}
+
+// Query
+func (c *Context) Query(key string) string {
+	return c.Request.URL.Query().Get(key)
+}
+
+// RendString response string
+func (c *Context) RendString(code int, msg string) (int, error) {
 	c.ResponseWriter.WriteHeader(code)
 	return c.ResponseWriter.Write([]byte(msg))
 }
 
-// RenderJson response json
-func (c *Context) Json(obj interface{}) (int, error) {
+// RendJson response json
+func (c *Context) RendJson(obj interface{}) (int, error) {
 	resp, _ := encodeJSON(obj)
 	return c.ResponseWriter.Write(resp)
+}
+
+// RendRerr response rerror
+func (c *Context) RendRerr(rerr *Rerror) (int, error) {
+	rerrRsp, _ := rerr.MarshalRerror()
+	return c.ResponseWriter.Write(rerrRsp)
 }
 
 // encodeJSON
