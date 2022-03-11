@@ -17,12 +17,7 @@ func main() {
 	srv.Run()
 }
 
-type User struct {
-	Id   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
 // malatd
 func malatdApi(ctx *td.Context) {
-	ctx.RendString(200, "malatd")
+	ctx.RenderString("malatd")
 }

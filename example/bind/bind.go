@@ -14,8 +14,8 @@ func main() {
 	srv := td.NewServer(td.NewSrvConfig())
 
 	// api router
-	srv.Get("/malatd1", malatdApi1)
-	srv.Post("/malatd2", malatdApi2)
+	srv.Get("/malatd1", malatdApi1Handle)
+	srv.Post("/malatd2", malatdApi2Handle)
 	srv.Run()
 }
 
@@ -35,37 +35,64 @@ var (
 	binderQuery = binding.QUERY
 )
 
-// malatd
-func malatdApi1(ctx *td.Context) {
+// malatdApi1Handle
+func malatdApi1Handle(ctx *td.Context) {
 	// bind params
 	params := new(Args)
 	err := binderQuery.Bind(ctx, params)
 	if err != nil {
 		panic(err)
 	}
-	td.Infof("Args-> %v", params)
 
-	result := &Result{
-		A: params.A,
-		B: params.B,
+	// api逻辑调用
+	result, rerr := malatdApi1Logic(ctx, params)
+	if rerr != nil {
+		ctx.RenderRerr(rerr)
+		return
 	}
-	ctx.RendJson(result)
+	ctx.Render(result)
 }
 
-// malatd
-func malatdApi2(ctx *td.Context) {
+// malatdApi1Logic
+func malatdApi1Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
+	td.Infof("Args-> %v", arg)
+	result := &Result{
+		A: arg.A,
+		B: arg.B,
+	}
+	return result, nil
+}
+
+// malatdApi2Handle
+func malatdApi2Handle(ctx *td.Context) {
 	// bind params
 	params := new(Args)
 	err := binder.Bind(ctx, params)
 	if err != nil {
-		panic(err)
+		//ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
+		//return
+		panic(td.RerrInternalServer.SetReason(err.Error()))
 	}
 
 	err = binderQuery.Bind(ctx, params)
 	if err != nil {
 		panic(err)
 	}
-	td.Infof("Args-> %v", params)
 
-	ctx.RendString(200, "malatd")
+	// api逻辑调用
+	result, rerr := malatdApi2Logic(ctx, params)
+	if rerr != nil {
+		ctx.RenderRerr(rerr)
+		return
+	}
+	ctx.Render(result)
+}
+
+func malatdApi2Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
+	td.Infof("Args-> %v", arg)
+	result := &Result{
+		A: arg.A,
+		B: arg.B,
+	}
+	return result, nil
 }

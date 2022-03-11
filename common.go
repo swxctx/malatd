@@ -1,5 +1,7 @@
 package td
 
+import "math"
+
 const (
 	// 公用错误码
 	CodeUnknownError = -1
@@ -46,4 +48,8 @@ var (
 	RerrNotFound         = NewRerror(CodeNotFound, CodeMessage(CodeNotFound), "")
 	RerrInternalServer   = NewRerror(CodeInternalServerError, CodeMessage(CodeInternalServerError), "")
 	RerrBadGateway  = NewRerror(CodeBadGateway, CodeMessage(CodeBadGateway), "")
+)
+
+const (
+ 	abortIndex int = math.MaxInt8 / 2
 )
