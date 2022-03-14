@@ -1,7 +1,6 @@
 package td
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/url"
 )
@@ -72,29 +71,4 @@ func (c *Context) QueryValues() url.Values {
 // Query
 func (c *Context) Query(key string) string {
 	return c.Request.URL.Query().Get(key)
-}
-
-// Render response json
-func (c *Context) Render(obj interface{}) (int, error) {
-	resp, _ := encodeJSON(obj)
-	c.ResponseWriter.Header().Set("content-type", "applicaton/json")
-	return c.ResponseWriter.Write(resp)
-}
-
-// Render response json
-func (c *Context) RenderString(resp string) (int, error) {
-	return c.ResponseWriter.Write([]byte(resp))
-}
-
-// RenderRerr response rerror
-func (c *Context) RenderRerr(rerr *Rerror) (int, error) {
-	rerrRsp, _ := rerr.MarshalRerror()
-	c.ResponseWriter.Header().Set("content-type", "applicaton/json")
-	c.index = abortIndex
-	return c.ResponseWriter.Write(rerrRsp)
-}
-
-// encodeJSON
-func encodeJSON(obj interface{}) ([]byte, error) {
-	return json.Marshal(obj)
 }
