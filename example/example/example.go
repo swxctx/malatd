@@ -22,8 +22,10 @@ func main() {
 	// new server
 	srv := td.NewServer(td.NewSrvConfig())
 
-	// api router
-	srv.Post("/login", loginHandle)
+	login := srv.Group("/user")
+	login.Post("/login", loginHandle)
+	login.Get("/login1", loginHandle)
+	srv.Post("/logi2", loginHandle)
 	srv.Run()
 }
 
