@@ -77,7 +77,7 @@ func (c *Context) Query(key string) string {
 // Render response json
 func (c *Context) Render(obj interface{}) (int, error) {
 	resp, _ := encodeJSON(obj)
-	c.ResponseWriter.Header().Set("content-type","applicaton/json")
+	c.ResponseWriter.Header().Set("content-type", "applicaton/json")
 	return c.ResponseWriter.Write(resp)
 }
 
@@ -89,7 +89,7 @@ func (c *Context) RenderString(resp string) (int, error) {
 // RenderRerr response rerror
 func (c *Context) RenderRerr(rerr *Rerror) (int, error) {
 	rerrRsp, _ := rerr.MarshalRerror()
-	c.ResponseWriter.Header().Set("content-type","applicaton/json")
+	c.ResponseWriter.Header().Set("content-type", "applicaton/json")
 	c.index = abortIndex
 	return c.ResponseWriter.Write(rerrRsp)
 }
