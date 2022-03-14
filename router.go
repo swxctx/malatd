@@ -32,25 +32,25 @@ func (r *Router) AddPlugin(plugins ...Plugin) {
 
 // Get
 func (r *Router) Get(relativePath string, plugins ...Plugin) {
-	Infof("[ROUTE]: %s GET", relativePath)
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
+	Infof("[ROUTE]: GET %s", path)
 	r.handle("GET", path, plugin)
 }
 
 // Post
 func (r *Router) Post(relativePath string, plugins ...Plugin) {
-	Infof("[ROUTE]: %s POST", relativePath)
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
+	Infof("[ROUTE]: POST %s", path)
 	r.handle("POST", path, plugin)
 }
 
 // Options
 func (r *Router) Options(relativePath string, plugins ...Plugin) {
-	Infof("[ROUTE]: %s OPTIONS", relativePath)
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
+	Infof("[ROUTE]: OPTIONS %s", path)
 	r.handle("OPTIONS", path, plugin)
 }
 
