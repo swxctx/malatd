@@ -56,7 +56,7 @@ func malatdApi1Handle(ctx *td.Context) {
 }
 
 // malatdApi1Logic
-func malatdApi1Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
+func malatdApi1Logic(ctx *td.Context, arg *Args) (*Result, *td.Rerror) {
 	td.Infof("Args-> %v", arg)
 	result := &Result{
 		A: arg.A,
@@ -91,7 +91,7 @@ func malatdApi2Handle(ctx *td.Context) {
 	ctx.Render(result)
 }
 
-func malatdApi2Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
+func malatdApi2Logic(ctx *td.Context, arg *Args) (*Result, *td.Rerror) {
 	td.Infof("Args-> %v", arg)
 	result := &Result{
 		A: arg.A,
