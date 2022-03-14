@@ -42,6 +42,7 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 		srvConfig: srvCfg,
 	}
 	srv.Router.server = srv
+	srv.router.NotFound = http.HandlerFunc(renderNotFound)
 
 	Infof("[SERVER] New server, Address: %s", srvCfg.Address)
 	return srv
