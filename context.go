@@ -63,6 +63,16 @@ func (c *Context) GetRemoteIP() string {
 	return c.Request.RemoteAddr
 }
 
+// RemoteAddr
+func (c *Context) RemoteAddr() string {
+	return c.Request.RemoteAddr
+}
+
+// RequestURI
+func (c *Context) RequestURI() string {
+	return c.Request.RequestURI
+}
+
 // QueryValues
 func (c *Context) QueryValues() url.Values {
 	return c.Request.URL.Query()
@@ -71,4 +81,14 @@ func (c *Context) QueryValues() url.Values {
 // Query
 func (c *Context) Query(key string) string {
 	return c.Request.URL.Query().Get(key)
+}
+
+// Method
+func (c *Context) Method() string {
+	return c.Request.Method
+}
+
+// UserAgent
+func (c *Context) UserAgent() string {
+	return c.Request.UserAgent()
 }

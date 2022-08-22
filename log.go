@@ -6,6 +6,6 @@ import (
 
 // runLogPlugin
 func runLogPlugin(ctx *Context) {
-	xlog.Infof("From %s, %s", ctx.Request.RemoteAddr, ctx.Request.RequestURI)
+	xlog.Infof("[%s] Request From: %s, %s, %s", ctx.Method(), ctx.GetRemoteIP(), ctx.RequestURI(), ctx.UserAgent())
 	ctx.Next()
 }
