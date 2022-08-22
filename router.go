@@ -1,6 +1,7 @@
 package td
 
 import (
+	"github.com/swxctx/xlog"
 	"net/http"
 
 	"github.com/swxctx/malatd/httprouter"
@@ -34,7 +35,7 @@ func (r *Router) AddPlugin(plugins ...Plugin) {
 func (r *Router) Get(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
-	Infof("[ROUTE]: GET %s", path)
+	xlog.Infof("[ROUTE]: GET %s", path)
 	r.handle("GET", path, plugin)
 }
 
@@ -42,7 +43,7 @@ func (r *Router) Get(relativePath string, plugins ...Plugin) {
 func (r *Router) Post(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
-	Infof("[ROUTE]: POST %s", path)
+	xlog.Infof("[ROUTE]: POST %s", path)
 	r.handle("POST", path, plugin)
 }
 
@@ -50,7 +51,7 @@ func (r *Router) Post(relativePath string, plugins ...Plugin) {
 func (r *Router) Options(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
 	plugin := append(r.Plugins, plugins...)
-	Infof("[ROUTE]: OPTIONS %s", path)
+	xlog.Infof("[ROUTE]: OPTIONS %s", path)
 	r.handle("OPTIONS", path, plugin)
 }
 
@@ -71,7 +72,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		r.server.router.GET(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					Errorf("[GET] err: %v", re)
+					xlog.Errorf("[GET] err: %v", re)
 					ctx.Render(RerrInternalServer)
 				}
 			}()
@@ -83,7 +84,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		r.server.router.POST(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					Errorf("[POST] err: %v", re)
+					xlog.Errorf("[POST] err: %v", re)
 					ctx.Render(RerrInternalServer)
 				}
 			}()
@@ -95,7 +96,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		r.server.router.OPTIONS(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			defer func() {
 				if re := recover(); re != nil {
-					Errorf("[POST] err: %v", re)
+					xlog.Errorf("[POST] err: %v", re)
 					ctx.Render(RerrInternalServer)
 				}
 			}()
@@ -105,6 +106,6 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		})
 	}
 	if err != nil {
-		Errorf("[PLUGIN] handle err: %v", err)
+		xlog.Errorf("[PLUGIN] handle err: %v", err)
 	}
 }

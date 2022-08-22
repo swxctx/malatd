@@ -13,11 +13,6 @@ import (
 	http://127.0.0.1:8080/malatd
 */
 
-var (
-	binder      = binding.JSON
-	binderQuery = binding.QUERY
-)
-
 func main() {
 	// new server
 	srv := td.NewServer(td.NewSrvConfig())
@@ -36,6 +31,7 @@ type (
 		Password string `json:"password"`
 	}
 	LoginResult struct {
+		AppVer   string `json:"app_ver"`
 		Username string `json:"username"`
 	}
 )
@@ -44,7 +40,7 @@ type (
 func loginHandle(ctx *td.Context) {
 	// bind arg
 	arg := new(LoginArgs)
-	err := binderQuery.Bind(ctx, arg)
+	err := binding.Binder(ctx, arg)
 	if err != nil {
 		ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
 		return
@@ -62,6 +58,7 @@ func loginHandle(ctx *td.Context) {
 // malatdApi1Logic
 func loginLogic(ctx *td.Context, arg *LoginArgs) (*LoginResult, *td.Rerror) {
 	result := &LoginResult{
+		AppVer:   arg.AppVer,
 		Username: arg.Username,
 	}
 	return result, nil

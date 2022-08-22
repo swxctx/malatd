@@ -53,22 +53,22 @@ func main() {
 
 // tokenPlugin
 func tokenPlugin(ctx *td.Context) {
-	td.Infof("tokenPlugin: current tokenPlugin")
-	td.Infof("tokenPlugin: Params-> %v", ctx.Request.URL.Query().Get("id"))
+	xlog.Infof("tokenPlugin: current tokenPlugin")
+	xlog.Infof("tokenPlugin: Params-> %v", ctx.Request.URL.Query().Get("id"))
 	ctx.Next()
 }
 
 // authHandle
 func authPlugin(ctx *td.Context) {
-	td.Infof("authPlugin: current authPlugin")
-	td.Infof("authPlugin: Params-> %v", ctx.Request.URL.Query().Get("id"))
+	xlog.Infof("authPlugin: current authPlugin")
+	xlog.Infof("authPlugin: Params-> %v", ctx.Request.URL.Query().Get("id"))
 	ctx.Next()
 }
 
 // malatd
 func malatdApi(ctx *td.Context) {
-	td.Infof("malatdApi: current malatdApi")
-	td.Infof("malatdApi: Params-> %v", ctx.Request.URL.Query().Get("id"))
+	xlog.Infof("malatdApi: current malatdApi")
+	xlog.Infof("malatdApi: Params-> %v", ctx.Request.URL.Query().Get("id"))
 	ctx.RenderString("hello malatd")
 }
 ```
@@ -134,7 +134,7 @@ func malatdApi1Handle(ctx *td.Context) {
 
 // malatdApi1Logic
 func malatdApi1Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
-	td.Infof("Args-> %v", arg)
+	xlog.Infof("Args-> %v", arg)
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
@@ -169,7 +169,7 @@ func malatdApi2Handle(ctx *td.Context) {
 }
 
 func malatdApi2Logic(ctx *td.Context, arg *Args)(*Result, *td.Rerror) {
-	td.Infof("Args-> %v", arg)
+	xlog.Infof("Args-> %v", arg)
 	result := &Result{
 		A: arg.A,
 		B: arg.B,

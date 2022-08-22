@@ -1,6 +1,7 @@
 package td
 
 import (
+	"github.com/swxctx/xlog"
 	"net/http"
 
 	"github.com/swxctx/malatd/httprouter"
@@ -44,17 +45,17 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 	srv.Router.server = srv
 	srv.router.NotFound = http.HandlerFunc(renderNotFound)
 
-	Infof("[SERVER] New server, Address: %s", srvCfg.Address)
+	xlog.Infof("[SERVER] New server, Address: %s", srvCfg.Address)
 	return srv
 }
 
 // ListenAndServe fast http listen
 func (srv *Server) Run() error {
-	Infof("[SERVER] %s Server Run", srv.srvConfig.Address)
+	xlog.Infof("[SERVER] %s Server Run", srv.srvConfig.Address)
 
 	// start listen
 	if err := http.ListenAndServe(srv.srvConfig.Address, srv.router); err != nil {
-		Errorf("[SERVER] Server Listen err: %v", err)
+		xlog.Errorf("[SERVER] Server Listen err: %v", err)
 		return err
 	}
 

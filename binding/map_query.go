@@ -37,7 +37,7 @@ func mapForm(ptr interface{}, form map[string][]string) error {
 		if inputFieldName == "" {
 			inputFieldName = typeField.Name
 
-			// if "form" tag is nil, we inspect if the field is a struct or struct pointer.
+			// if "query" tag is nil, we inspect if the field is a struct or struct pointer.
 			// this would not make sense for JSON parsing but it does for a form
 			// since data is flatten
 			if structFieldKind == reflect.Ptr {

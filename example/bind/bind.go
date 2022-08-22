@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/swxctx/malatd/binding"
+	"github.com/swxctx/xlog"
 
 	td "github.com/swxctx/malatd"
 )
@@ -57,7 +58,7 @@ func malatdApi1Handle(ctx *td.Context) {
 
 // malatdApi1Logic
 func malatdApi1Logic(ctx *td.Context, arg *Args) (*Result, *td.Rerror) {
-	td.Infof("Args-> %v", arg)
+	xlog.Infof("Args-> %v", arg)
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
@@ -92,7 +93,7 @@ func malatdApi2Handle(ctx *td.Context) {
 }
 
 func malatdApi2Logic(ctx *td.Context, arg *Args) (*Result, *td.Rerror) {
-	td.Infof("Args-> %v", arg)
+	xlog.Infof("Args-> %v", arg)
 	result := &Result{
 		A: arg.A,
 		B: arg.B,
