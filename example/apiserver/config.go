@@ -7,16 +7,16 @@ import (
 )
 
 type Config struct {
-	SrvConfig *td.SrvConfig `json:"srv_config"`
+	SrvConfig *td.SrvConfig `yaml:"srv_config"`
 }
 
-var (
-	cfg *Config
-)
+var cfg = &Config{
+	SrvConfig: td.NewSrvConfig(),
+}
 
 func reload() {
 	conf := gconf.NewConf(&gconf.Gconf{
-		ConfPath: "./config/config.json",
+		ConfPath: "./config/config.yaml",
 	})
 
 	// get config

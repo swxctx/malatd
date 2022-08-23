@@ -11,8 +11,7 @@ import (
 func loginHandle(ctx *td.Context) {
 	// bind arg
 	arg := new(args.LoginArgs)
-	err := binding.Binder(ctx, arg)
-	if err != nil {
+	if err := binding.Binder(ctx, arg); err != nil {
 		ctx.RenderRerr(td.RerrInternalServer.SetReason(err.Error()))
 		return
 	}

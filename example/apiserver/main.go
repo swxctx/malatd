@@ -7,7 +7,7 @@ import (
 
 func main() {
 	// new server
-	srv := td.NewServer(td.NewSrvConfig())
+	srv := td.NewServer(cfg.SrvConfig)
 	api.Route(srv)
 	srv.Run()
 }
