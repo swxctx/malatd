@@ -1,6 +1,31 @@
 # malatd
 简洁+易用的Golang Web框架
 
+### 使用
+[查看详细使用说明](https://github.com/swxctx/malatd/tree/master/cmd)
+
+```shell
+NAME:
+   Malatd project command - A deployment tools of malatd frameware
+
+USAGE:
+   malatd [global options] command [command options] [arguments...]
+
+VERSION:
+   1.0.0
+
+AUTHOR:
+   swxctx
+
+COMMANDS:
+   gen      Generate a malatd project
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --help, -h     show help
+   --version, -v  print the version
+```
+
 ### 普通使用
 ```
 package main
