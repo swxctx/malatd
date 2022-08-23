@@ -1,8 +1,12 @@
 package td
 
 import (
-	"github.com/swxctx/xlog"
 	"net/http"
+	"path"
+	"strings"
+
+	"github.com/swxctx/gutil"
+	"github.com/swxctx/xlog"
 
 	"github.com/swxctx/malatd/httprouter"
 )
@@ -108,4 +112,16 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 	if err != nil {
 		xlog.Errorf("[PLUGIN] handle err: %v", err)
 	}
+}
+
+// ToUriPath maps struct(func) name to URI path.
+func ToUriPath(name string) string {
+	p := strings.Replace(name, "__", ".", -1)
+	a := strings.Split(p, "_")
+	for k, v := range a {
+		a[k] = gutil.FieldSnakeString(v)
+	}
+	p = path.Join(a...)
+	p = path.Join("/", p)
+	return strings.Replace(p, ".", "_", -1)
 }

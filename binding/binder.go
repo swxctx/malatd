@@ -7,6 +7,8 @@ var (
 	binderQuery = QUERY
 )
 
+type Empty = struct{}
+
 // Binder request params binder
 func Binder(ctx *td.Context, obj interface{}) error {
 	// json

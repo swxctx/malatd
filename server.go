@@ -1,8 +1,9 @@
 package td
 
 import (
-	"github.com/swxctx/xlog"
 	"net/http"
+
+	"github.com/swxctx/xlog"
 
 	"github.com/swxctx/malatd/httprouter"
 )
