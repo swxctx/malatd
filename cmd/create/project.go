@@ -109,9 +109,6 @@ func (p *Project) Generator() {
 		if err != nil {
 			xlog.Fatalf("[malatd] create %s error: %v", realName, err)
 		}
-		if k == "main.go" {
-			v = fmt.Sprintf(v, time.Now().Format("2006-01-02 15:04:05"))
-		}
 		b := formatSource(gutil.StringToBytes(v))
 		f.Write(b)
 		f.Close()
@@ -301,6 +298,7 @@ func baseTypeToJsonValue(t string) (string, bool) {
 }
 
 func (p *Project) genMainFile() {
+	p.replace("main.go", "${project_gen_time}", time.Now().Format("2006-01-02 15:04:05"))
 	p.replace("main.go", "${service_api_prefix}", gutil.FieldSnakeString(p.Name))
 	p.replace("config.go", "${service_api_prefix}", gutil.FieldSnakeString(p.Name))
 }

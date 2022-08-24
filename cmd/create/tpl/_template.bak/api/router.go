@@ -4,5 +4,5 @@ import (
 	td "github.com/swxctx/malatd"
 )
 
-func routeLogic(srv *td.Server) {
+func routeLogic(srv *td.Server, rootGroup string) {
 }

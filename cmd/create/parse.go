@@ -648,7 +648,7 @@ func (r *router) routerString(groupName, fullNamePrefix, uriPrefix string) strin
 		fullNamePrefix = joinName(fullNamePrefix, r.name)
 		uriPrefix = path.Join("/", uriPrefix, td.ToUriPath(r.name))
 		groupModule := strings.ToLower(r.name)
-		text += fmt.Sprintf("\n\n%s := srv.Group(\"%s\")\n", groupModule, uriPrefix)
+		text += fmt.Sprintf("\n\n%s := srv.Group(rootGroup + \"%s\")\n", groupModule, uriPrefix)
 		if len(r.handlers) > 0 {
 			for _, h := range r.handlers {
 				h.fullName = joinName(fullNamePrefix, h.name)

@@ -39,9 +39,9 @@ import (
 )
 
 func main() {
-	// Gen Time: %s
+	// Gen Time: ${project_gen_time}
 	srv := td.NewServer(cfg.SrvConfig)
-	api.Route(srv)
+	api.Route(srv, "/${service_api_prefix}")
 	srv.Run()
 }
 `,
@@ -91,10 +91,8 @@ ${type_define_list}
 
 	"logic/tmp_code.gen.go": `package logic
 import (
-	// td "github.com/swxctx/malatd"
-
-	// "${import_prefix}/args"
-	// "${import_prefix}/rerrs"
+	 td "github.com/swxctx/malatd"
+	 "${import_prefix}/args"
 )
 ${logic_api_define}
 `,
@@ -117,7 +115,9 @@ import (
 	td "github.com/swxctx/malatd"
 )
 
-func Route(srv *td.Server) {
+func Route(srv *td.Server, rootGroup string) {
+	//自定义路由处理
+	routeLogic(srv, rootGroup)
 	${register_router_list}
 }
 `,
