@@ -158,7 +158,7 @@ func (t *tplInfo) getCodeBlock(i interface{}) string {
 }
 
 func (t *tplInfo) parseImports() {
-	const codec = `"github.com/swxctx/malatd/binder"`
+	const codec = `"github.com/swxctx/malatd/binding"`
 	t.typeImports = append(t.typeImports, codec)
 	for _, imp := range t.astFile.Imports {
 		s := t.getCodeBlock(imp)
@@ -210,7 +210,7 @@ func (t *tplInfo) collectStructs() {
 					a := &aliasType{
 						doc:  addSlash(doc),
 						name: structName,
-						text: fmt.Sprintf("%s = codec.PbEmpty", structName),
+						text: fmt.Sprintf("%s = binding.Empty", structName),
 					}
 					a.rawTypeName = a.text[strings.LastIndex(strings.TrimSpace(strings.Split(a.text, "//")[0]), " ")+1:]
 					if a.doc == "" {
@@ -603,7 +603,7 @@ func (t *tplInfo) getHandler(f *ast.FuncType) (*handler, error) {
 var emptyStructType = &aliasType{
 	doc:  "// EmptyStruct alias of type struct {}\n",
 	name: "EmptyStruct",
-	text: "EmptyStruct = binder.PbEmpty",
+	text: "EmptyStruct = binding.Empty",
 }
 
 func (a *aliasType) String() string {

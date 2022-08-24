@@ -344,7 +344,7 @@ func (p *Project) genLogicFile() {
 	for _, h := range p.tplInfo.HandlerList() {
 		name := h.fullName
 		s += fmt.Sprintf(
-			"%sfunc %s(ctx td.Context,arg *args.%s)(*args.%s,*td.Rerror){\nreturn new(args.%s),nil\n}\n\n",
+			"%sfunc %s(ctx *td.Context,arg *args.%s)(*args.%s,*td.Rerror){\nreturn new(args.%s),nil\n}\n\n",
 			h.doc, name, h.arg, h.result, h.result,
 		)
 	}
