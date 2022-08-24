@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/swxctx/malatd/cmd/run"
+
 	"github.com/swxctx/malatd/cmd/create"
 	"github.com/swxctx/malatd/cmd/info"
 	"github.com/urfave/cli"
@@ -26,7 +28,35 @@ func main() {
 		},
 	}
 
-	app.Commands = []cli.Command{newCom}
+	// run a project
+	runCom := cli.Command{
+		Name:      "run",
+		Usage:     "Compile and run go project",
+		UsageText: `malatd run`,
+		Flags: []cli.Flag{
+			cli.StringSliceFlag{
+				Name:  "watch_exts, x",
+				Value: (*cli.StringSlice)(&[]string{".go", ".ini", ".yaml", ".toml", ".xml"}),
+				Usage: "Specified to increase the listening file suffix",
+			},
+			cli.StringSliceFlag{
+				Name:  "notwatch, n",
+				Value: (*cli.StringSlice)(&[]string{}),
+				Usage: "Not watch files or directories",
+			},
+			cli.StringFlag{
+				Name:  "app_path, p",
+				Usage: "The path(relative/absolute) of the project",
+			},
+		},
+		Before: initProject,
+		Action: func(c *cli.Context) error {
+			run.RunProject()
+			return nil
+		},
+	}
+
+	app.Commands = []cli.Command{newCom, runCom}
 	app.Run(os.Args)
 }
 
