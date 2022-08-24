@@ -126,12 +126,12 @@ func (p *Project) gen() {
 	p.genLogicFile()
 }
 
-func (p *Project) genAndWriteReadmeFile() {
+func (p *Project) genAndWriteReadmeFile(rootGroup string) {
 	f, err := os.OpenFile("./README.md", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		xlog.Fatalf("[malatd] create README.md error: %v", err)
 	}
-	f.WriteString(p.genReadme())
+	f.WriteString(p.genReadme(rootGroup))
 	f.Close()
 	fmt.Printf("generate %s\n", info.ProjPath()+"/README.md")
 }
@@ -140,21 +140,24 @@ func commentToHtml(txt string) string {
 	return strings.TrimLeft(strings.Replace(txt, "// ", "<br>", -1), "<br>")
 }
 
-func (p *Project) genReadme() string {
+func (p *Project) genReadme(rootGroup string) string {
 	var text string
 	text += commentToHtml(p.tplInfo.doc)
 	text += "\n"
 	text += "## API Desc\n\n"
 	for _, h := range p.tplInfo.HandlerList() {
-		text += fmt.Sprintf("### %s\n\n%s\n\n", h.fullName, p.handlerDesc(h))
+		text += fmt.Sprintf("### %s\n\n%s\n\n", h.fullName, p.handlerDesc(h, rootGroup))
 	}
 	r := strings.Replace(__readme__, "${PROJ_NAME}", info.ProjName(), -1)
 	r = strings.Replace(r, "${readme}", text, 1)
 	return r
 }
 
-func (p *Project) handlerDesc(h *handler) string {
+func (p *Project) handlerDesc(h *handler, rootGroupArg string) string {
 	rootGroup := gutil.FieldSnakeString(p.Name)
+	if len(rootGroupArg) > 0 {
+		rootGroup = rootGroupArg
+	}
 	uri := path.Join("/", rootGroup, h.uri)
 	var text string
 	text += commentToHtml(h.doc) + "\n"
@@ -165,12 +168,12 @@ func (p *Project) handlerDesc(h *handler) string {
 		fields, _ := p.tplInfo.lookupTypeFields(name)
 		if len(fields) == 0 {
 			// query
-			text += fmt.Sprintf("- %s: `GET`\n", txt)
+			text += fmt.Sprintf("- %s: `GET/POST`\n", txt)
 		} else {
 			jsonStr := p.fieldsJson(fields)
 			if len(jsonStr) <= 2 || jsonStr == "{}" {
 				// query
-				text += fmt.Sprintf("- %s: `GET`\n", txt)
+				text += fmt.Sprintf("- %s: `GET/POST`\n", txt)
 			} else {
 				// body
 				text += fmt.Sprintf("- %s: `POST`\n", txt)
@@ -180,7 +183,7 @@ func (p *Project) handlerDesc(h *handler) string {
 
 	method(h.arg, "METHOD")
 
-	queryParam := "- REQ-QUERY:\n"
+	queryParam := "- QUERY:\n"
 	for _, param := range h.queryParams {
 		doc := param.doc
 		if len(doc) == 0 {
@@ -208,8 +211,8 @@ func (p *Project) handlerDesc(h *handler) string {
 		}
 	}
 
-	fn(h.arg, "REQ-BODY")
-	fn(h.result, "RESULT")
+	fn(h.arg, "BODY")
+	fn(h.result, "RESPONSE")
 
 	return text
 }

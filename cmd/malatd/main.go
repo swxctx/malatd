@@ -30,25 +30,8 @@ func main() {
 
 	// run a project
 	runCom := cli.Command{
-		Name:      "run",
-		Usage:     "Compile and run go project",
-		UsageText: `malatd run`,
-		Flags: []cli.Flag{
-			cli.StringSliceFlag{
-				Name:  "watch_exts, x",
-				Value: (*cli.StringSlice)(&[]string{".go", ".ini", ".yaml", ".toml", ".xml"}),
-				Usage: "Specified to increase the listening file suffix",
-			},
-			cli.StringSliceFlag{
-				Name:  "notwatch, n",
-				Value: (*cli.StringSlice)(&[]string{}),
-				Usage: "Not watch files or directories",
-			},
-			cli.StringFlag{
-				Name:  "app_path, p",
-				Usage: "The path(relative/absolute) of the project",
-			},
-		},
+		Name:   "run",
+		Usage:  "Compile and run go project",
 		Before: initProject,
 		Action: func(c *cli.Context) error {
 			run.RunProject()
@@ -56,7 +39,24 @@ func main() {
 		},
 	}
 
-	app.Commands = []cli.Command{newCom, runCom}
+	// new a README.md
+	newDocCom := cli.Command{
+		Name:  "doc",
+		Usage: "Generate a project README.md(malatd doc || malatd doc -r ${root_group})",
+		Flags: []cli.Flag{
+			cli.StringFlag{
+				Name:  "root_group, r",
+				Usage: "The project name uri or input",
+			},
+		},
+		Before: initProject,
+		Action: func(c *cli.Context) error {
+			create.CreateDoc(c.String("r"))
+			return nil
+		},
+	}
+
+	app.Commands = []cli.Command{newCom, runCom, newDocCom}
 	app.Run(os.Args)
 }
 
