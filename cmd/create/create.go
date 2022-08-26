@@ -64,7 +64,7 @@ func CreateDoc(rootGroup string) {
 	os.MkdirAll(info.AbsPath(), os.FileMode(0755))
 	err := os.Chdir(info.AbsPath())
 	if err != nil {
-		xlog.Fatalf("[micro] Jump working directory failed: %v", err)
+		xlog.Fatalf("[malatd] Jump working directory failed: %v", err)
 	}
 
 	// read temptale file
@@ -81,7 +81,7 @@ func CreateDoc(rootGroup string) {
 	// write template file
 	f, err := os.OpenFile(MalatdTpl, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
 	if err != nil {
-		xlog.Fatalf("[micro] Create files error: %v", err)
+		xlog.Fatalf("[malatd] Create files error: %v", err)
 	}
 	defer f.Close()
 	f.Write(formatSource(b))
@@ -108,14 +108,14 @@ func appendErrorInfo() {
 
 	b, err := ioutil.ReadFile("rerrs/rerrs.go")
 	if err != nil {
-		xlog.Errorf("[micro] Append error list error: %v", err)
+		xlog.Errorf("[malatd] Append error list error: %v", err)
 	}
 
 	re := regexp.MustCompile(`\(([1-9][0-9]*), ".*", `)
 	a := re.FindAllStringSubmatch(string(b), -1)
 	for _, row := range a {
 		if len(row) < 1 {
-			xlog.Errorf("[micro] err rows invalid")
+			xlog.Errorf("[malatd] err rows invalid")
 			continue
 		}
 		rows := strings.Split(row[0], ",")
@@ -127,7 +127,7 @@ func appendErrorInfo() {
 
 	f, err := os.OpenFile("README.md", os.O_WRONLY|os.O_APPEND, os.ModePerm)
 	if err != nil {
-		xlog.Errorf("[micro] Append error list error: %v", err)
+		xlog.Errorf("[malatd] Append error list error: %v", err)
 	}
 	defer f.Close()
 	xlog.Infof("ctn-> %s", ctn)
