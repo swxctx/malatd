@@ -26,6 +26,9 @@ func NewServer(srvCfg *SrvConfig, plugins ...Plugin) *Server {
 	}
 
 	// :8080 -> 0.0.0.0:8080
+	if len(srvCfg.Address) <= 0 {
+		panic("Malatd: srv config is nil.")
+	}
 	if string(srvCfg.Address[0]) == ":" {
 		srvCfg.Address = "0.0.0.0" + srvCfg.Address
 	}
