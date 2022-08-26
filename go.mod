@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/BurntSushi/toml v1.2.0 // indirect
+	github.com/howeyc/fsnotify v0.9.0
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/swxctx/gutil v0.0.0-20220823102507-86d0b7bc0b2b
 	github.com/swxctx/xlog v0.0.0-20200617113404-90cdad0cb8aa
