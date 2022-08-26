@@ -54,7 +54,7 @@ import (
 )
 
 type Config struct {
-	SrvConfig *td.SrvConfig ` + "`json:\"srv_config\"`" + `
+	SrvConfig *td.SrvConfig ` + "`yaml:\"srv_config\"`" + `
 }
 
 var cfg = &Config{
