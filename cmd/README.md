@@ -18,6 +18,8 @@ AUTHOR:
 
 COMMANDS:
    gen      Generate a malatd project
+   run      Compile and run go project
+   doc      Generate a project README.md(malatd doc || malatd doc -r ${root_group})
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
