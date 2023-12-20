@@ -10,3 +10,7 @@ type LoginResult struct {
 	AppVer   string `json:"app_ver"`
 	Username string `json:"username"`
 }
+
+type IndexArgs struct{}
+
+type IndexResult struct{}

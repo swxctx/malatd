@@ -6,6 +6,8 @@ import (
 )
 
 func Route(srv *td.Server) {
+	srv.Get("/", indexHandle)
+
 	login := srv.Group("/user")
 	login.Post("/login", plugin.AuthPlugin, loginHandle)
 	login.Get("/login", plugin.AuthPlugin, loginHandle)

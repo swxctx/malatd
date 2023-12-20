@@ -24,3 +24,8 @@ func loginHandle(ctx *td.Context) {
 	}
 	ctx.Render(result)
 }
+
+// indexHandle
+func indexHandle(ctx *td.Context) {
+	logic.IndexLogic(ctx, nil)
+}
