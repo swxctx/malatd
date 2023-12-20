@@ -34,6 +34,11 @@ func (c *Context) RenderRerr(rerr *Rerror) (int, error) {
 	return c.ResponseWriter.Write(rerrRsp)
 }
 
+// Redirect request redirect
+func (c *Context) Redirect(targetUrl string, code int) {
+	http.Redirect(c.ResponseWriter, c.Request, targetUrl, code)
+}
+
 // renderNotFound
 func renderNotFound(response http.ResponseWriter, request *http.Request) {
 	notFoundResp, _ := RerrNotFound.MarshalRerror()
