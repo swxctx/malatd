@@ -12,7 +12,7 @@ import (
 // Render response json
 func (c *Context) Render(obj interface{}) (int, error) {
 	resp, _ := encodeJSON(obj)
-	c.ResponseWriter.Header().Set("content-type", "applicaton/json")
+	c.ResponseWriter.Header().Set("Content-type", "application/json")
 	return c.ResponseWriter.Write(resp)
 }
 
@@ -29,7 +29,7 @@ func (c *Context) RenderString(resp string) (int, error) {
 // RenderRerr response rerror
 func (c *Context) RenderRerr(rerr *Rerror) (int, error) {
 	rerrRsp, _ := rerr.MarshalRerror()
-	c.ResponseWriter.Header().Set("content-type", "applicaton/json")
+	c.ResponseWriter.Header().Set("Content-type", "application/json")
 	c.index = abortIndex
 	return c.ResponseWriter.Write(rerrRsp)
 }
@@ -42,6 +42,6 @@ func (c *Context) Redirect(targetUrl string, code int) {
 // renderNotFound
 func renderNotFound(response http.ResponseWriter, request *http.Request) {
 	notFoundResp, _ := RerrNotFound.MarshalRerror()
-	response.Header().Set("content-type", "applicaton/json")
+	response.Header().Set("Content-type", "application/json")
 	response.Write(notFoundResp)
 }
