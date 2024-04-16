@@ -2,6 +2,8 @@ package td
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -44,4 +46,21 @@ func renderNotFound(response http.ResponseWriter, request *http.Request) {
 	notFoundResp, _ := RerrNotFound.MarshalRerror()
 	response.Header().Set("Content-type", "application/json")
 	response.Write(notFoundResp)
+}
+
+// Stream 方法用于发送流式响应
+func (c *Context) Stream(step func(w io.Writer) bool) error {
+	flusher, ok := c.ResponseWriter.(http.Flusher)
+	if !ok {
+		return fmt.Errorf("stream: ResponseWriter does not implement http.Flusher")
+	}
+
+	for {
+		keepOpen := step(c.ResponseWriter)
+		if !keepOpen {
+			break
+		}
+		flusher.Flush()
+	}
+	return nil
 }
