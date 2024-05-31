@@ -61,10 +61,6 @@ func (r *Router) Options(relativePath string, plugins ...Plugin) {
 
 // handle
 func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
-	var (
-		err error
-	)
-
 	switch httpMethod {
 	case "GET":
 		r.server.router.GET(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -103,6 +99,7 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 	case "OPTIONS":
 		r.server.router.OPTIONS(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
 			ctx := Context{
+
 				index:   0,
 				server:  r.server,
 				plugins: plugins,
@@ -117,9 +114,6 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 			ctx.ResponseWriter = response
 			ctx.Next()
 		})
-	}
-	if err != nil {
-		xlog.Errorf("[PLUGIN] handle err: %v", err)
 	}
 }
 
