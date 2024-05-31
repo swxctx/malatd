@@ -61,12 +61,6 @@ func (r *Router) Options(relativePath string, plugins ...Plugin) {
 
 // handle
 func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
-	ctx := Context{
-		index:   0,
-		server:  r.server,
-		plugins: plugins,
-	}
-
 	var (
 		err error
 	)
@@ -74,6 +68,11 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 	switch httpMethod {
 	case "GET":
 		r.server.router.GET(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			ctx := Context{
+				index:   0,
+				server:  r.server,
+				plugins: plugins,
+			}
 			defer func() {
 				if re := recover(); re != nil {
 					xlog.Errorf("[GET] err: %v", re)
@@ -86,6 +85,11 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		})
 	case "POST":
 		r.server.router.POST(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			ctx := Context{
+				index:   0,
+				server:  r.server,
+				plugins: plugins,
+			}
 			defer func() {
 				if re := recover(); re != nil {
 					xlog.Errorf("[POST] err: %v", re)
@@ -98,6 +102,11 @@ func (r *Router) handle(httpMethod, relativePath string, plugins Plugins) {
 		})
 	case "OPTIONS":
 		r.server.router.OPTIONS(relativePath, func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			ctx := Context{
+				index:   0,
+				server:  r.server,
+				plugins: plugins,
+			}
 			defer func() {
 				if re := recover(); re != nil {
 					xlog.Errorf("[POST] err: %v", re)
