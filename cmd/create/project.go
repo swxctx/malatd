@@ -109,8 +109,12 @@ func (p *Project) Generator() {
 		if err != nil {
 			xlog.Fatalf("[malatd] create %s error: %v", realName, err)
 		}
-		b := formatSource(gutil.StringToBytes(v))
-		f.Write(b)
+		if k != "config/config.yaml" {
+			b := formatSource(gutil.StringToBytes(v))
+			f.Write(b)
+		} else {
+			f.Write(gutil.StringToBytes(v))
+		}
 		f.Close()
 		fmt.Printf("generate %s\n", realName)
 	}

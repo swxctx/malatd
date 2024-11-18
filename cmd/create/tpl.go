@@ -77,12 +77,11 @@ func init() {
 	reload()
 }
 `,
-	"config/config.yaml": "",
-
+	"config/config.yaml": `srv_config:
+ address: 127.0.0.1:8080`,
 	"args/const.gen.go": `package args
 ${const_list}
 `,
-
 	"args/type.gen.go": `package args
 import (${import_list}
 )
