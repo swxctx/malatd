@@ -8,6 +8,8 @@ import (
 	"github.com/swxctx/malatd/httprouter"
 )
 
+type RenderFunc func(ctx *Context, obj interface{}) (int, error)
+
 // Server
 type Server struct {
 	// 路由组
@@ -16,6 +18,8 @@ type Server struct {
 	srvConfig *SrvConfig
 	// api路由
 	router *httprouter.Router
+	// 响应自定义
+	customRender RenderFunc
 }
 
 // NewServer
@@ -61,4 +65,8 @@ func (srv *Server) Run() error {
 	}
 
 	return nil
+}
+
+func (s *Server) SetRender(fn RenderFunc) {
+	s.customRender = fn
 }

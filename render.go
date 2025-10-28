@@ -13,13 +13,16 @@ import (
 
 // Render response json
 func (c *Context) Render(obj interface{}) (int, error) {
-	resp, _ := encodeJSON(obj)
+	if c.server != nil && c.server.customRender != nil {
+		return c.server.customRender(c, obj)
+	}
+	resp, _ := EncodeJSON(obj)
 	c.ResponseWriter.Header().Set("Content-type", "application/json")
 	return c.ResponseWriter.Write(resp)
 }
 
-// encodeJSON
-func encodeJSON(obj interface{}) ([]byte, error) {
+// EncodeJSON marshal json
+func EncodeJSON(obj interface{}) ([]byte, error) {
 	return json.Marshal(obj)
 }
 
