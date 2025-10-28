@@ -31,9 +31,12 @@ type Plugins []Plugin
 
 // Next
 func (c *Context) Next() {
-	c.index++
-	if c.index < len(c.plugins) {
-		c.plugins[c.index](c)
+	c.index += 1
+	if c.index <= len(c.plugins) {
+		c.plugins[c.index-1](c)
+	} else {
+		c.index = 1
+		c.plugins[0](c)
 	}
 }
 
