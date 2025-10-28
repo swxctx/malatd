@@ -45,7 +45,7 @@ var (
 	RerrWriteFailed      = NewRerror(CodeWriteFailed, CodeMessage(CodeWriteFailed), "")
 	RerrInvalidParameter = NewRerror(CodeInvalidParameter, CodeMessage(CodeInvalidParameter), "")
 	RerrBadPacket        = NewRerror(CodeBadPacket, CodeMessage(CodeBadPacket), "")
-	RerrCodeUnauthorized = NewRerror(CodeUnauthorized, CodeMessage(CodeUnauthorized), "")
+	RerrUnauthorized     = NewRerror(CodeUnauthorized, CodeMessage(CodeUnauthorized), "")
 	RerrNotFound         = NewRerror(CodeNotFound, CodeMessage(CodeNotFound), "")
 	RerrInternalServer   = NewRerror(CodeInternalServerError, CodeMessage(CodeInternalServerError), "")
 	RerrBadGateway       = NewRerror(CodeBadGateway, CodeMessage(CodeBadGateway), "")
