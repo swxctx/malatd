@@ -18,6 +18,8 @@ type (
 		server *Server
 		// server plugins || handler
 		plugins Plugins
+		// save plugin data
+		values map[string]interface{}
 	}
 )
 
@@ -91,4 +93,18 @@ func (c *Context) Method() string {
 // UserAgent
 func (c *Context) UserAgent() string {
 	return c.Request.UserAgent()
+}
+
+func (c *Context) SetValue(key string, val interface{}) {
+	if c.values == nil {
+		c.values = make(map[string]interface{})
+	}
+	c.values[key] = val
+}
+
+func (c *Context) GetValue(key string) interface{} {
+	if c.values == nil {
+		return nil
+	}
+	return c.values[key]
 }
