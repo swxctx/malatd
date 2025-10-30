@@ -25,15 +25,51 @@ func (jsonBinding) Name() string {
 func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
 	ct := ctx.ContentType()
 	rv := reflect.ValueOf(obj)
-	if rv.Kind() == reflect.Ptr {
+	if rv.Kind() != reflect.Ptr {
+		return fmt.Errorf("Bind: obj must be a pointer")
+	}
+
+	if rv.Elem().Kind() == reflect.Map {
 		elem := rv.Elem()
-		if elem.Kind() == reflect.Map && elem.IsNil() {
+		if elem.IsNil() {
 			elem.Set(reflect.MakeMap(elem.Type()))
 		}
+
+		switch {
+		case strings.HasPrefix(ct, "application/x-www-form-urlencoded"):
+			if err := ctx.Request.ParseForm(); err != nil {
+				return err
+			}
+			for k, v := range ctx.Request.Form {
+				if len(v) > 0 {
+					elem.SetMapIndex(reflect.ValueOf(k), reflect.ValueOf(v[0]))
+				}
+			}
+			return nil
+
+		case strings.HasPrefix(ct, "multipart/form-data"):
+			if err := ctx.Request.ParseMultipartForm(32 << 20); err != nil {
+				return err
+			}
+			for k, v := range ctx.Request.MultipartForm.Value {
+				if len(v) > 0 {
+					elem.SetMapIndex(reflect.ValueOf(k), reflect.ValueOf(v[0]))
+				}
+			}
+			return nil
+
+		case strings.HasPrefix(ct, "application/json"):
+			return decodeJSON(ctx.Request.Body, obj)
+
+		default:
+			return decodeJSON(ctx.Request.Body, obj)
+		}
 	}
+
 	switch {
 	case strings.HasPrefix(ct, "application/json"):
 		return decodeJSON(ctx.Request.Body, obj)
+
 	case strings.HasPrefix(ct, "application/x-www-form-urlencoded"):
 		if err := ctx.Request.ParseForm(); err != nil {
 			return err
@@ -46,6 +82,7 @@ func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
 		}
 		b, _ := json.Marshal(formMap)
 		return json.Unmarshal(b, obj)
+
 	case strings.HasPrefix(ct, "multipart/form-data"):
 		if err := ctx.Request.ParseMultipartForm(32 << 20); err != nil {
 			return err
@@ -58,6 +95,7 @@ func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
 		}
 		b, _ := json.Marshal(formMap)
 		return json.Unmarshal(b, obj)
+
 	default:
 		return decodeJSON(ctx.Request.Body, obj)
 	}
