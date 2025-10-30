@@ -21,7 +21,9 @@ type Router struct {
 
 // 注册组路由
 func (r *Router) Group(relativePath string, plugins ...Plugin) *Router {
-	gPlugins := append(r.Plugins, plugins...)
+	copied := make(Plugins, len(r.Plugins))
+	copy(copied, r.Plugins)
+	gPlugins := append(copied, plugins...)
 	return &Router{
 		Plugins:  gPlugins,
 		basePath: getReqPath(r.basePath, relativePath),
@@ -38,25 +40,31 @@ func (r *Router) AddPlugin(plugins ...Plugin) {
 // Get
 func (r *Router) Get(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
-	plugin := append(r.Plugins, plugins...)
+	copied := make(Plugins, len(r.Plugins))
+	copy(copied, r.Plugins)
+	all := append(copied, plugins...)
 	xlog.Infof("[ROUTE]: GET %s", path)
-	r.handle("GET", path, plugin)
+	r.handle("GET", path, all)
 }
 
 // Post
 func (r *Router) Post(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
-	plugin := append(r.Plugins, plugins...)
+	copied := make(Plugins, len(r.Plugins))
+	copy(copied, r.Plugins)
+	all := append(copied, plugins...)
 	xlog.Infof("[ROUTE]: POST %s", path)
-	r.handle("POST", path, plugin)
+	r.handle("POST", path, all)
 }
 
 // Options
 func (r *Router) Options(relativePath string, plugins ...Plugin) {
 	path := getReqPath(r.basePath, relativePath)
-	plugin := append(r.Plugins, plugins...)
+	copied := make(Plugins, len(r.Plugins))
+	copy(copied, r.Plugins)
+	all := append(copied, plugins...)
 	xlog.Infof("[ROUTE]: OPTIONS %s", path)
-	r.handle("OPTIONS", path, plugin)
+	r.handle("OPTIONS", path, all)
 }
 
 // handle
