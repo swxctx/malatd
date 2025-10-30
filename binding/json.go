@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"reflect"
 	"strings"
 
 	td "github.com/swxctx/malatd"
@@ -23,6 +24,13 @@ func (jsonBinding) Name() string {
 // Bind
 func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
 	ct := ctx.ContentType()
+	rv := reflect.ValueOf(obj)
+	if rv.Kind() == reflect.Ptr {
+		elem := rv.Elem()
+		if elem.Kind() == reflect.Map && elem.IsNil() {
+			elem.Set(reflect.MakeMap(elem.Type()))
+		}
+	}
 	switch {
 	case strings.HasPrefix(ct, "application/json"):
 		return decodeJSON(ctx.Request.Body, obj)
