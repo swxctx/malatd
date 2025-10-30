@@ -3,7 +3,6 @@ package binding
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"strings"
 
@@ -52,7 +51,7 @@ func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
 		b, _ := json.Marshal(formMap)
 		return json.Unmarshal(b, obj)
 	default:
-		return errors.New("unsupported content type: " + ct)
+		return decodeJSON(ctx.Request.Body, obj)
 	}
 }
 
