@@ -3,7 +3,9 @@ package binding
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
+	"strings"
 
 	td "github.com/swxctx/malatd"
 )
@@ -21,7 +23,37 @@ func (jsonBinding) Name() string {
 
 // Bind
 func (jsonBinding) Bind(ctx *td.Context, obj interface{}) error {
-	return decodeJSON(ctx.Request.Body, obj)
+	ct := ctx.ContentType()
+	switch {
+	case strings.HasPrefix(ct, "application/json"):
+		return decodeJSON(ctx.Request.Body, obj)
+	case strings.HasPrefix(ct, "application/x-www-form-urlencoded"):
+		if err := ctx.Request.ParseForm(); err != nil {
+			return err
+		}
+		formMap := make(map[string]string)
+		for k, v := range ctx.Request.Form {
+			if len(v) > 0 {
+				formMap[k] = v[0]
+			}
+		}
+		b, _ := json.Marshal(formMap)
+		return json.Unmarshal(b, obj)
+	case strings.HasPrefix(ct, "multipart/form-data"):
+		if err := ctx.Request.ParseMultipartForm(32 << 20); err != nil {
+			return err
+		}
+		formMap := make(map[string]string)
+		for k, v := range ctx.Request.MultipartForm.Value {
+			if len(v) > 0 {
+				formMap[k] = v[0]
+			}
+		}
+		b, _ := json.Marshal(formMap)
+		return json.Unmarshal(b, obj)
+	default:
+		return errors.New("unsupported content type: " + ct)
+	}
 }
 
 func (jsonBinding) BindBody(body []byte, obj interface{}) error {
